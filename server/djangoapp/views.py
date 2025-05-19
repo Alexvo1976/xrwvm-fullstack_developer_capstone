@@ -55,19 +55,21 @@ def registration(request):
     last_name = data['lastName']
     email = data['email']
     username_exist = False
-    email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
-    except:
+    except User.DoesNotExist:
         # If not, simply log this is a new user
         logger.debug("{} is new user".format(username))
 
     # If it is a new user
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password, email=email)
+        user = User.objects.create_user(
+            username=username, first_name=first_name, last_name=last_name,
+            password=password, email=email
+        )
         # Login the user and redirect to list page
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
@@ -118,9 +120,9 @@ def add_review(request):
     if not request.user.is_anonymous:
         data = json.loads(request.body)
         try:
-            response = post_review(data)
-            return JsonResponse(
-                {"status": 200}
+            # Remove the unused 'response' variable if not needed
+            post_review(data)
+            return JsonResponse({"status": 200})
             )
         except Exception as e:  # Catch a specific exception
             logger.error(f"Error in posting review: {e}")
