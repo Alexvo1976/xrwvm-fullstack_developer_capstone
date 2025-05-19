@@ -1,4 +1,3 @@
-/*jshint esversion: 8 */
 from .models import CarMake, CarModel
 
 def initiate():
