@@ -80,7 +80,9 @@ def registration(request):
         data = {"userName": username,"error": "Already Registered"}
         return JsonResponse(data)
 
-#Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
+
+# Update the `get_dealerships` view to render a list of dealerships by default.
+# If a state is passed, render dealerships for that state.
 def get_dealerships(request, state="All"):
     if (state == "All"):
         endpoint = "/fetchDealers"
